@@ -17,7 +17,6 @@ Clone this repo:
 ```bash
 git clone git@github.com:MyLovelyAxe/lerobot_smolvla_docker.git
 cd lerobot_smolvla_docker
-chmod +x build_image.sh test_container.sh create_container.sh
 ```
 
 Build image:
