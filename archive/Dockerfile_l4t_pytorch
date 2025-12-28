@@ -1,0 +1,45 @@
+FROM dustynv/l4t-pytorch:r36.4.0
+
+ENV DEBIAN_FRONTEND=noninteractive
+WORKDIR /opt
+
+# System deps that commonly matter for robotics + video + OpenCV
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    ffmpeg \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip tooling
+RUN python3 -m pip install --upgrade pip setuptools wheel
+
+# Get your fork/branch
+# RUN git clone --depth 1 git@github.com:MyLovelyAxe/lerobot.git
+RUN git clone --depth 1 https://github.com/MyLovelyAxe/lerobot.git
+
+# Install smolvla extras
+WORKDIR /opt/lerobot
+
+# freeze torch/torchvision versions from base image to prevent pip replacing them
+RUN python3 - <<'PY'
+import torch
+from pathlib import Path
+Path("/tmp/constraints.txt").write_text(f"torch=={torch.__version__}\n")
+print(open("/tmp/constraints.txt").read())
+PY
+
+# install with PyPI + extra indexes, and tell pip it may upgrade
+RUN pip install -e ".[smolvla]" --no-build-isolation \
+    -i https://pypi.org/simple \
+    --extra-index-url https://pypi.ngc.nvidia.com \
+    --extra-index-url http://jetson.webredirect.org/jp6/cu126 \
+    -c /tmp/constraints.txt \
+    --upgrade
+
+
+# Quick sanity check at build time (optional but helpful)
+RUN python3 -c "import torch; print(torch.__version__, torch.cuda.is_available())"
