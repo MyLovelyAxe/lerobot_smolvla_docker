@@ -1,5 +1,5 @@
 docker run -it --user root \
-  --name smolvla_container \
+  --name smolvla_pytorch27_container \
   --runtime nvidia \
   --gpus all \
   --net=host \
@@ -9,7 +9,7 @@ docker run -it --user root \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e DISPLAY=$DISPLAY \
   -e HOME=/opt \
-  lerobot-smolvla:r36.4.0 \
+  lerobot-smolvla:pytorch2.7 \
   bash
 
 # arguments:
@@ -29,5 +29,5 @@ docker run -it --user root \
 #   -v /tmp/.X11-unix:/tmp/.X11-unix: enable X11 forwarding for GUI applications
 #   -e DISPLAY=$DISPLAY: pass DISPLAY variable so GUI apps know where to render
 #   -e HOME=/opt: set HOME directory inside container
-#   lerobot-smolvla:r36.4.0: the image to run
+#   lerobot-smolvla:pytorch2.7: the image to run
 #   bash: start an interactive bash shell

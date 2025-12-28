@@ -1,1 +1,1 @@
-docker build -t lerobot-smolvla:r36.4.0 .
+docker build -t lerobot-smolvla:pytorch2.7 .

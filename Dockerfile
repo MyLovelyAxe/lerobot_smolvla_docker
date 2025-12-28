@@ -39,6 +39,9 @@ RUN pip install -e ".[smolvla]" --no-build-isolation \
     --extra-index-url http://jetson.webredirect.org/jp6/cu126 \
     -c /tmp/constraints.txt
 
+# Downgrade numpy to 1.x, since pip automatically chose numpy 2.2.6 for lerobot, but some packages from base image require 1.x version
+RUN pip install numpy==1.26.4 -i https://pypi.org/simple
+
 # quickly test the versions
 RUN python3 -c "import torch, torchvision; \
 print('torch:', torch.__version__); \
